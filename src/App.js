@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import  { OwmApiKey } from './keys';
+
+const OWM_API_KEY = OwmApiKey.apiKey;
 
 class App extends Component {
   constructor() {
@@ -35,7 +38,9 @@ class App extends Component {
           <h2>Welcome to React</h2>
         </div>
         <p className="App-intro">
-          Lat: {this.state.lat}, Long: {this.state.long}
+          Lat: {this.state.lat}, Long: {this.state.long}<br />
+          {OWM_API_KEY}
+
         </p>
       </div>
     );
