@@ -4,13 +4,16 @@ import './App.css';
 import  { OwmApiKey } from './keys';
 
 const OWM_API_KEY = OwmApiKey.apiKey;
+const owm_url = `http://api.openweathermap.org/data/2.5/weather?&appid=${OWM_API_KEY}`;
+// lat=%s&lon=%s&
 
 class App extends Component {
   constructor() {
     super();
     this.state = {
       lat: 90.0,
-      long: 0.0
+      long: 0.0,
+      weather_data: {}
     }
 
     // Checks if geolocation exist, then get lat and long to store in state.
@@ -27,7 +30,33 @@ class App extends Component {
   }
 
   componentDidMount() {
+    if(this.state.lat !== 90.0 || this.state.long !== 0.0) {
+      this._getLocalWeatherData();
+    } else {
+      console.log('Loading...');
+    }
+  }
 
+  async _getLocalWeatherData() {
+    const url = `${owm_url}&lat=${this.state.lat}&lon=${this.state.long}`
+    try {
+      let res = await fetch(url);
+      let weather_data = await res.json();
+      console.log(weather_data);
+      // fetch from api and only save relevant data to state
+      this.setState({
+        weather_data: {
+          city_name: weather_data.name,
+          weather: weather_data.weather,
+          sunrise: weather_data.sys.sunrise,
+          sunset: weather_data.sys.sunset
+        }
+      });
+      console.log(this.state.weather_data);
+    }
+    catch(ex) {
+      console.error(url, ex);
+    }
   }
 
   render() {
