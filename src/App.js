@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import  { OwmApiKey } from './keys';
+import WeatherDetails from './weather_details';
 
 const OWM_API_KEY = OwmApiKey.apiKey;
 const owm_url = `http://api.openweathermap.org/data/2.5/weather?&appid=${OWM_API_KEY}`;
@@ -11,34 +12,33 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      lat: 90.0,
-      long: 0.0,
-      weather_data: {}
+      weather_data: {
+        city_name: '',
+        temp_info: {},
+        weather: {},
+        sunrise: '',
+        sunset: ''
+      }
     }
 
-    // Checks if geolocation exist, then get lat and long to store in state.
+    // Checks if geolocation exist, call api with lat & long.
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
-        this.setState({
-          lat: position.coords.latitude,
-          long: position.coords.longitude
-        });
+        this._getLocalWeatherData(position.coords.latitude, position.coords.longitude);
       });
     } else {
         console.log("Geolocation is not supported by this browser.");
     }
+    console.log(this.state)
   }
 
   componentDidMount() {
-    if(this.state.lat !== 90.0 || this.state.long !== 0.0) {
-      this._getLocalWeatherData();
-    } else {
-      console.log('Loading...');
-    }
+
+    // this._getLocalWeatherData();
   }
 
-  async _getLocalWeatherData() {
-    const url = `${owm_url}&lat=${this.state.lat}&lon=${this.state.long}`
+  async _getLocalWeatherData(lat, long) {
+    const url = `${owm_url}&lat=${lat}&lon=${long}`
     try {
       let res = await fetch(url);
       let weather_data = await res.json();
@@ -47,6 +47,7 @@ class App extends Component {
       this.setState({
         weather_data: {
           city_name: weather_data.name,
+          temp_info: weather_data.main,
           weather: weather_data.weather,
           sunrise: weather_data.sys.sunrise,
           sunset: weather_data.sys.sunset
@@ -60,17 +61,19 @@ class App extends Component {
   }
 
   render() {
+
     return (
       <div className="App">
         <div className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to React</h2>
+          <h2>{this.state.weather_data.city_name}</h2>
         </div>
-        <p className="App-intro">
-          Lat: {this.state.lat}, Long: {this.state.long}<br />
-          {OWM_API_KEY}
-
-        </p>
+        <div className="App-intro">
+          <WeatherDetails
+            // temp={this.state.weather_data.temp_info}
+            // weather={this.state.weather_data.weather} 
+          />
+        </div>
       </div>
     );
   }
