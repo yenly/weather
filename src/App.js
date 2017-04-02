@@ -60,6 +60,16 @@ class App extends Component {
     return local_time.toLocaleTimeString();
   }
 
+  // convert kelvin to fahrenheit
+  convertToF = (kTemp) => {
+    return Math.floor((( kTemp - 273.15) * 9/5) + 32);
+  }
+
+  // convert kelvin to celsius
+  convertToC = (kTemp) => {
+    return Math.floor(kTemp - 273.15);
+  }
+
   render() {
     if(!this.state.weather_data) return <div>Loading...</div>
 
@@ -71,11 +81,12 @@ class App extends Component {
         </div>
         <div className="App-intro">
           <WeatherDetails
-            temp={this.state.weather_data.temp_info}
+            temp={this.convertToF(this.state.weather_data.temp_info)}
             weather={this.state.weather_data.weather.description}
             sunrise={this.getLocalTime(this.state.weather_data.sunrise)}
             sunset={this.getLocalTime(this.state.weather_data.sunset)}
           />
+          {/* {this.convertToC(this.state.weather_data.temp_info)} */}
         </div>
       </div>
     );
