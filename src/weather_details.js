@@ -1,11 +1,13 @@
 import React from 'react';
 
-const WeatherDetails = () => {
-
+const WeatherDetails = ({temp, weather, sunrise, sunset}) => {
+  console.log(temp, weather);
   return (
     <div>
-      weather details display here.
-
+      <p>{temp}</p>
+      <p>{weather}</p>
+      <p>Sunrise: {sunrise}</p>
+      <p>Sunset: {sunset}</p>
     </div>
   );
 };

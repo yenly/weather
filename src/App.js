@@ -12,13 +12,7 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      weather_data: {
-        city_name: '',
-        temp_info: {},
-        weather: {},
-        sunrise: '',
-        sunset: ''
-      }
+      weather_data: null
     }
 
     // Checks if geolocation exist, call api with lat & long.
@@ -29,7 +23,7 @@ class App extends Component {
     } else {
         console.log("Geolocation is not supported by this browser.");
     }
-    console.log(this.state)
+    // console.log(this.state)
   }
 
   componentDidMount() {
@@ -47,8 +41,8 @@ class App extends Component {
       this.setState({
         weather_data: {
           city_name: weather_data.name,
-          temp_info: weather_data.main,
-          weather: weather_data.weather,
+          temp_info: weather_data.main.temp,
+          weather: weather_data.weather[0],
           sunrise: weather_data.sys.sunrise,
           sunset: weather_data.sys.sunset
         }
@@ -61,6 +55,7 @@ class App extends Component {
   }
 
   render() {
+    if(!this.state.weather_data) return <div>Loading...</div>
 
     return (
       <div className="App">
@@ -70,8 +65,10 @@ class App extends Component {
         </div>
         <div className="App-intro">
           <WeatherDetails
-            // temp={this.state.weather_data.temp_info}
-            // weather={this.state.weather_data.weather} 
+            temp={this.state.weather_data.temp_info}
+            weather={this.state.weather_data.weather.description}
+            sunrise={this.state.weather_data.sunrise}
+            sunset={this.state.weather_data.sunset}
           />
         </div>
       </div>
