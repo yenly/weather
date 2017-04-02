@@ -36,7 +36,7 @@ class App extends Component {
     try {
       let res = await fetch(url);
       let weather_data = await res.json();
-      console.log(weather_data);
+      // console.log(weather_data);
       // fetch from api and only save relevant data to state
       this.setState({
         weather_data: {
@@ -47,11 +47,17 @@ class App extends Component {
           sunset: weather_data.sys.sunset
         }
       });
-      console.log(this.state.weather_data);
+      // console.log(this.state.weather_data);
     }
     catch(ex) {
       console.error(url, ex);
     }
+  }
+
+  // take UTC timestamp and convert to Local time
+  getLocalTime = (timestamp) => {
+    let local_time = new Date(timestamp * 1000);
+    return local_time.toLocaleTimeString();
   }
 
   render() {
@@ -67,8 +73,8 @@ class App extends Component {
           <WeatherDetails
             temp={this.state.weather_data.temp_info}
             weather={this.state.weather_data.weather.description}
-            sunrise={this.state.weather_data.sunrise}
-            sunset={this.state.weather_data.sunset}
+            sunrise={this.getLocalTime(this.state.weather_data.sunrise)}
+            sunset={this.getLocalTime(this.state.weather_data.sunset)}
           />
         </div>
       </div>

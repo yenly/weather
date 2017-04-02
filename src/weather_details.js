@@ -1,7 +1,6 @@
 import React from 'react';
 
 const WeatherDetails = ({temp, weather, sunrise, sunset}) => {
-  console.log(temp, weather);
   return (
     <div>
       <p>{temp}</p>
