@@ -1,6 +1,7 @@
 import React from 'react';
 
 const WeatherDetails = ({temp, weather, sunrise, sunset}) => {
+
   return (
     <div>
       <p>{temp}</p>

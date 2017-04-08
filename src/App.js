@@ -5,14 +5,15 @@ import  { OwmApiKey } from './keys';
 import WeatherDetails from './weather_details';
 
 const OWM_API_KEY = OwmApiKey.apiKey;
-const owm_url = `http://api.openweathermap.org/data/2.5/weather?&appid=${OWM_API_KEY}`;
+const owmUrl = `http://api.openweathermap.org/data/2.5/weather?&appid=${OWM_API_KEY}`;
 // lat=%s&lon=%s&
 
 class App extends Component {
   constructor() {
     super();
     this.state = {
-      weather_data: null
+      weatherData: null,
+      tempMetric: null
     }
 
     // Checks if geolocation exist, call api with lat & long.
@@ -32,22 +33,21 @@ class App extends Component {
   }
 
   async _getLocalWeatherData(lat, long) {
-    const url = `${owm_url}&lat=${lat}&lon=${long}`
+    const url = `${owmUrl}&lat=${lat}&lon=${long}`
     try {
       let res = await fetch(url);
-      let weather_data = await res.json();
+      let weatherData = await res.json();
       // console.log(weather_data);
       // fetch from api and only save relevant data to state
       this.setState({
-        weather_data: {
-          city_name: weather_data.name,
-          temp_info: weather_data.main.temp,
-          weather: weather_data.weather[0],
-          sunrise: weather_data.sys.sunrise,
-          sunset: weather_data.sys.sunset
+        weatherData: {
+          cityName: weatherData.name,
+          tempInfo: weatherData.main.temp,
+          weather: weatherData.weather[0],
+          sunrise: weatherData.sys.sunrise,
+          sunset: weatherData.sys.sunset
         }
       });
-      // console.log(this.state.weather_data);
     }
     catch(ex) {
       console.error(url, ex);
@@ -56,8 +56,8 @@ class App extends Component {
 
   // take UTC timestamp and convert to Local time
   getLocalTime = (timestamp) => {
-    let local_time = new Date(timestamp * 1000);
-    return local_time.toLocaleTimeString();
+    let localTime = new Date(timestamp * 1000);
+    return localTime.toLocaleTimeString();
   }
 
   // convert kelvin to fahrenheit
@@ -71,22 +71,21 @@ class App extends Component {
   }
 
   render() {
-    if(!this.state.weather_data) return <div>Loading...</div>
+    if(!this.state.weatherData) return <div>Loading...</div>
 
     return (
       <div className="App">
         <div className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
-          <h2>{this.state.weather_data.city_name}</h2>
+          <h2>{this.state.weatherData.cityName}</h2>
         </div>
         <div className="App-intro">
           <WeatherDetails
-            temp={this.convertToF(this.state.weather_data.temp_info)}
-            weather={this.state.weather_data.weather.description}
-            sunrise={this.getLocalTime(this.state.weather_data.sunrise)}
-            sunset={this.getLocalTime(this.state.weather_data.sunset)}
+            temp={this.convertToF(this.state.weatherData.tempInfo)}
+            weather={this.state.weatherData.weather.description}
+            sunrise={this.getLocalTime(this.state.weatherData.sunrise)}
+            sunset={this.getLocalTime(this.state.weatherData.sunset)}
           />
-          {/* {this.convertToC(this.state.weather_data.temp_info)} */}
         </div>
       </div>
     );
