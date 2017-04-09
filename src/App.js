@@ -83,6 +83,7 @@ class App extends Component {
           <WeatherDetails
             temp={this.convertToF(this.state.weatherData.tempInfo)}
             weather={this.state.weatherData.weather.description}
+            icon={this.state.weatherData.weather.icon}
             sunrise={this.getLocalTime(this.state.weatherData.sunrise)}
             sunset={this.getLocalTime(this.state.weatherData.sunset)}
           />
