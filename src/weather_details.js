@@ -13,8 +13,6 @@ import nightStorm from './oliver_svg/storm-2.svg';
 import daySnow from './oliver_svg/snowing-1.svg';
 import nightSnow from './oliver_svg/night-snow.svg';
 import hazeMist from './oliver_svg/tide-1.svg';
-import sunrise from './oliver_svg/sunrise.svg';
-import sunset from './oliver_svg/sunset-1.svg';
 
 const icon_svg = {
   '01d': sunny,
@@ -37,14 +35,10 @@ const icon_svg = {
   '50n': hazeMist
 }
 
-const WeatherDetails = ({temp, weather, icon, sunrise, sunset}) => {
-
+const WeatherDetails = ({weather, icon}) => {
   return (
     <div>
       <p> <img alt={weather} className='weatherIcon' src={icon_svg[icon]} /><br/>{weather}</p>
-      <p>{temp}&deg;</p>
-      <p>Sunrise: {sunrise}</p>
-      <p>Sunset: {sunset}</p>
     </div>
   );
 };

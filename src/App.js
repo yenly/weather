@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import  { OwmApiKey } from './keys';
 import WeatherDetails from './weather_details';
+import sunrise from './oliver_svg/sunrise.svg';
+import sunset from './oliver_svg/sunset-1.svg';
 
 const OWM_API_KEY = OwmApiKey.apiKey;
 const owmUrl = `http://api.openweathermap.org/data/2.5/weather?&appid=${OWM_API_KEY}`;
@@ -75,18 +76,15 @@ class App extends Component {
 
     return (
       <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
+        <div className="weatherDial">
           <h2>{this.state.weatherData.cityName}</h2>
-        </div>
-        <div className="App-intro">
           <WeatherDetails
-            temp={this.convertToF(this.state.weatherData.tempInfo)}
             weather={this.state.weatherData.weather.description}
             icon={this.state.weatherData.weather.icon}
-            sunrise={this.getLocalTime(this.state.weatherData.sunrise)}
-            sunset={this.getLocalTime(this.state.weatherData.sunset)}
           />
+          <h2>{this.convertToF(this.state.weatherData.tempInfo)}&deg; F / C</h2>
+          <p>Sunrise: {this.getLocalTime(this.state.weatherData.sunrise)}</p>
+          <p>Sunset: {this.getLocalTime(this.state.weatherData.sunset)}</p>
         </div>
       </div>
     );
