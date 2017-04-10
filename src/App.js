@@ -2,12 +2,39 @@ import React, { Component } from 'react';
 import './App.css';
 import  { OwmApiKey } from './keys';
 import WeatherDetails from './weather_details';
-import sunrise from './oliver_svg/sunrise.svg';
-import sunset from './oliver_svg/sunset-1.svg';
+// import sunrise from './oliver_svg/sunrise.svg';
+// import sunset from './oliver_svg/sunset-1.svg';
+import styled from 'styled-components';
 
 const OWM_API_KEY = OwmApiKey.apiKey;
 const owmUrl = `http://api.openweathermap.org/data/2.5/weather?&appid=${OWM_API_KEY}`;
 // lat=%s&lon=%s&
+
+const Wrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 1rem;
+  vertical-align: baseline;
+  height: 100vh;
+`;
+
+const Card = styled.section`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  box-shadow: rgba(0, 0, 0, 0.45098) 0rem 1.13rem 4.125rem 0rem;
+  width: 50%;
+  height: auto;
+  border-radius: 0.625rem;
+  background: #000;
+  opacity: .75;
+  text-align: center;
+  background-image: linear-gradient(180deg, #78909C 0%, #37474F);
+`;
+
 
 class App extends Component {
   constructor() {
@@ -75,8 +102,8 @@ class App extends Component {
     if(!this.state.weatherData) return <div>Loading...</div>
 
     return (
-      <div className="App">
-        <div className="weatherDial">
+      <Wrapper>
+        <Card>
           <h2>{this.state.weatherData.cityName}</h2>
           <WeatherDetails
             weather={this.state.weatherData.weather.description}
@@ -85,8 +112,8 @@ class App extends Component {
           <h2>{this.convertToF(this.state.weatherData.tempInfo)}&deg; F / C</h2>
           <p>Sunrise: {this.getLocalTime(this.state.weatherData.sunrise)}</p>
           <p>Sunset: {this.getLocalTime(this.state.weatherData.sunset)}</p>
-        </div>
-      </div>
+        </Card>
+      </Wrapper>
     );
   }
 }
