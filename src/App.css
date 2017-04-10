@@ -1,12 +1,9 @@
 /*
 temp styles
 */
-.App {
+body {
   text-align: center;
-}
-
-.weatherDial {
-
+  /*background-image: url("./images/bg.jpg");*/
 }
 
 .weatherIcon {

@@ -2,9 +2,11 @@ import React, { Component } from 'react';
 import './App.css';
 import  { OwmApiKey } from './keys';
 import WeatherDetails from './weather_details';
-// import sunrise from './oliver_svg/sunrise.svg';
-// import sunset from './oliver_svg/sunset-1.svg';
+import sunrise from './oliver_svg/sunrise.svg';
+import sunset from './oliver_svg/sunset-1.svg';
 import styled from 'styled-components';
+import leImage from './images/landsend.jpg';
+// import bkgdOverlay from './images/bg.jpg';
 
 const OWM_API_KEY = OwmApiKey.apiKey;
 const owmUrl = `http://api.openweathermap.org/data/2.5/weather?&appid=${OWM_API_KEY}`;
@@ -18,6 +20,10 @@ const Wrapper = styled.div`
   padding: 1rem;
   vertical-align: baseline;
   height: 100vh;
+  background-image: linear-gradient(69deg, rgba(235, 129, 106, 0.8) 50%, rgba(239, 168, 124, 0.5)), url(${leImage});
+  background-size: cover, cover;
+  background-repeat: no-repeat, no-repeat;
+  background-position: enter center, top left;
 `;
 
 const Card = styled.section`
@@ -33,6 +39,39 @@ const Card = styled.section`
   opacity: .75;
   text-align: center;
   background-image: linear-gradient(180deg, #78909C 0%, #37474F);
+`;
+
+const Temperature = styled.article`
+  font-size: 4rem;
+`;
+
+const Sol = styled.article`
+  flex-direction: row;
+  justify-content: space-around;
+  width: 100%;
+  padding: .8rem;
+`;
+
+const Sunrise = styled.span`
+  display: inline-block;
+  background-image: url(${sunrise});
+  background-repeat: no-repeat;
+  background-position: left middle;
+  padding: 5px 0 0 28px;
+  margin-right: 20px;
+`;
+
+const Sunset = styled.span`
+  display: inline-block;
+  background-image: url(${sunset});
+  background-repeat: no-repeat;
+  background-position: left middle;
+  padding: 5px 0 0 28px;
+`;
+
+// todo: Need better design
+const Button = styled.button`
+  font-size: 2rem;
 `;
 
 
@@ -74,7 +113,9 @@ class App extends Component {
           weather: weatherData.weather[0],
           sunrise: weatherData.sys.sunrise,
           sunset: weatherData.sys.sunset
-        }
+        },
+        // todo: need to read country code and set tempMetric accordingly
+        tempMetric: 'F'
       });
     }
     catch(ex) {
@@ -82,6 +123,7 @@ class App extends Component {
     }
   }
 
+  // todo: Change to use moments.js
   // take UTC timestamp and convert to Local time
   getLocalTime = (timestamp) => {
     let localTime = new Date(timestamp * 1000);
@@ -98,6 +140,23 @@ class App extends Component {
     return Math.floor(kTemp - 273.15);
   }
 
+  handleClick = (e) => {
+    e.preventDefault();
+    if(this.state.tempMetric === 'F') {
+      this.setState({tempMetric: 'C'})
+    } else {
+      this.setState({tempMetric: 'F'})
+    }
+  }
+
+  displayTemp = () => {
+    if(this.state.tempMetric === 'F') {
+      return <div>{this.convertToF(this.state.weatherData.tempInfo)}&deg; F <Button onClick={this.handleClick}>C</Button></div>
+    } else {
+      return <div>{this.convertToC(this.state.weatherData.tempInfo)}&deg; C <Button onClick={this.handleClick}>F</Button></div>
+    }
+  }
+
   render() {
     if(!this.state.weatherData) return <div>Loading...</div>
 
@@ -109,9 +168,13 @@ class App extends Component {
             weather={this.state.weatherData.weather.description}
             icon={this.state.weatherData.weather.icon}
           />
-          <h2>{this.convertToF(this.state.weatherData.tempInfo)}&deg; F / C</h2>
-          <p>Sunrise: {this.getLocalTime(this.state.weatherData.sunrise)}</p>
-          <p>Sunset: {this.getLocalTime(this.state.weatherData.sunset)}</p>
+          <Temperature>
+            {this.displayTemp()}
+          </Temperature>
+          <Sol>
+            <Sunrise>{this.getLocalTime(this.state.weatherData.sunrise)}</Sunrise>
+            <Sunset>{this.getLocalTime(this.state.weatherData.sunset)}</Sunset>
+          </Sol>
         </Card>
       </Wrapper>
     );
