@@ -4,9 +4,11 @@ import  { OwmApiKey } from './keys';
 import WeatherDetails from './weather_details';
 import sunrise from './oliver_svg/sunrise.svg';
 import sunset from './oliver_svg/sunset-1.svg';
+import fah from './oliver_svg/farenheit.svg';
+import cel from './oliver_svg/celsius.svg';
 import styled from 'styled-components';
 import leImage from './images/landsend.jpg';
-// import bkgdOverlay from './images/bg.jpg';
+import { media } from './style-utils';
 
 const OWM_API_KEY = OwmApiKey.apiKey;
 const owmUrl = `http://api.openweathermap.org/data/2.5/weather?&appid=${OWM_API_KEY}`;
@@ -39,6 +41,10 @@ const Card = styled.section`
   opacity: .75;
   text-align: center;
   background-image: linear-gradient(180deg, #78909C 0%, #37474F);
+  color: #fff;
+  ${ media.handheld`
+    width: 100%;
+  `}
 `;
 
 const Temperature = styled.article`
@@ -69,10 +75,16 @@ const Sunset = styled.span`
   padding: 5px 0 0 28px;
 `;
 
-// todo: Need better design
 const Button = styled.button`
   font-size: 2rem;
+  cursor: pointer;
+  height: 50px;
+  width: 50px;
+  background-image: ${props => props.primary ? `url(${cel})` : `url(${fah})`} ;
+  background-color: transparent;
+  border: none;
 `;
+
 
 
 class App extends Component {
@@ -151,9 +163,9 @@ class App extends Component {
 
   displayTemp = () => {
     if(this.state.tempMetric === 'F') {
-      return <div>{this.convertToF(this.state.weatherData.tempInfo)}&deg; F <Button onClick={this.handleClick}>C</Button></div>
+      return <div>{this.convertToF(this.state.weatherData.tempInfo)}<sup>&deg;F</sup> <Button primary onClick={this.handleClick} /></div>
     } else {
-      return <div>{this.convertToC(this.state.weatherData.tempInfo)}&deg; C <Button onClick={this.handleClick}>F</Button></div>
+      return <div>{this.convertToC(this.state.weatherData.tempInfo)}<sup>&deg;C</sup> <Button onClick={this.handleClick} /></div>
     }
   }
 
