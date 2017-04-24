@@ -11,7 +11,7 @@ import leImage from './images/landsend.jpg';
 import { media } from './style-utils';
 
 const OWM_API_KEY = OwmApiKey.apiKey;
-const owmUrl = `http://api.openweathermap.org/data/2.5/weather?&appid=${OWM_API_KEY}`;
+const owmUrl = `https://crossorigin.me/http://api.openweathermap.org/data/2.5/weather?&appid=${OWM_API_KEY}`;
 // lat=%s&lon=%s&
 
 const Wrapper = styled.div`
